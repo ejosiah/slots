@@ -1,0 +1,4 @@
+slots
+=====
+
+Slot machine
