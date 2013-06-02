@@ -11,20 +11,22 @@ import java.util.Map;
 public class PayoutCombos {
 	
 	private final Map<Integer, PayoutCombo> payoutCombos = new HashMap<Integer, PayoutCombo>();
+	private final Lines lines;
 	
-	public PayoutCombos(List<PayoutCombo> payoutCombos) {
+	public PayoutCombos(List<PayoutCombo> payoutCombos, Lines lines) {
 		for(PayoutCombo payoutCombo : payoutCombos){
 			this.payoutCombos.put(payoutCombo.id(), payoutCombo);
 		}
+		this.lines = lines;
 	}
 
 	public PayoutCombo getPayoutComboFor(Query query){
 		PayoutCombo combo = null;
 		if(query.id() != null){
 			combo = getPayoutComobForId(query.id());
-		}else if(query.symbols() != null && query.lineHelper() != null){
-			combo = getPayoutComboFor(query.symbols(), query.lineHelper()
-					, query.line(), query.numberOfCoins(), query.wildMultiplier());
+		}else if(query.symbols() != null){
+			combo = getPayoutComboFor(query.symbols(), query.line()
+					, query.numberOfCoins(), query.wildMultiplier());
 		}
 		return combo != null ? combo : PayoutCombo.NO_PAYOUT;
 	}
@@ -33,10 +35,10 @@ public class PayoutCombos {
 		return payoutCombos.get(id);
 	}
 	
-	private PayoutCombo getPayoutComboFor(List<List<Symbol>> reels,Lines lineHelper
-			, Integer line, Integer numberOfCoins, BigDecimal wildMultiplier) {
+	private PayoutCombo getPayoutComboFor(List<List<Symbol>> reels, Integer line
+			, Integer numberOfCoins, BigDecimal wildMultiplier) {
 		
-		List<Symbol> symbols = lineHelper.symbolsForLine(line, reels);
+		List<Symbol> symbols = lines.symbolsForLine(line, reels);
 		List<PayoutCombo> matchingPayoutCombos = matchingPayoutCombos( symbols, numberOfCoins);
 		
 		if(matchingPayoutCombos.size() == 0){

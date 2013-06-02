@@ -18,11 +18,17 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class PayoutCombosUTest {
 	
 	private List<PayoutCombo> combos = TestHelper.loadPayout();
-	private PayoutCombos payoutCombos = new PayoutCombos(combos);
 	private List<Symbol> symbols = TestHelper.payoutSymbols();
 
 	@Mock Query query;
-	@Mock Lines lineHelper;
+	@Mock Lines lines;
+	
+	private PayoutCombos payoutCombos;
+	
+	@Before
+	public void setup(){
+		payoutCombos = new PayoutCombos(combos, lines);
+	}
 
 	@Test
 	public void testFindById() {
@@ -52,11 +58,10 @@ public class PayoutCombosUTest {
 		
 		when(query.id()).thenReturn(null);
 		when(query.symbols()).thenReturn(reels);
-		when(query.lineHelper()).thenReturn(lineHelper);
 		when(query.numberOfCoins()).thenReturn(null);
 		when(query.line()).thenReturn(3);
 		
-		when(lineHelper.symbolsForLine(3, reels))
+		when(lines.symbolsForLine(3, reels))
 			.thenReturn(Arrays.asList(symbol1, symbol1, symbol1, symbol1, symbol1));
 		
 		PayoutCombo expected = combos.get(0);
