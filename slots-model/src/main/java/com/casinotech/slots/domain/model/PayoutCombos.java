@@ -56,7 +56,7 @@ public class PayoutCombos {
 		List<PayoutCombo> matchingCombos = new ArrayList<>();
 		
 		for(PayoutCombo combo : combos){
-			if(combo.matchs(symbols)){
+			if(combo.matches(symbols)){
 				matchingCombos.add(combo);
 			}
 		}

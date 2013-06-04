@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 @Data
-public class Win implements Comparable<Win> {
+public class Win implements Comparable<Win>, Cloneable {
 	
 	public static final Win NO_WIN = new Win(BigDecimal.ZERO, false);
 	public static final Win PROGRESSSIVE = new Win(BigDecimal.ZERO, true);
@@ -26,7 +26,7 @@ public class Win implements Comparable<Win> {
 	}
 	
 	public static Win progressiveWin(){
-		return new Win(BigDecimal.ZERO, true);
+		return PROGRESSSIVE;
 	}
 	
 	public static Win of(String size){
@@ -45,5 +45,14 @@ public class Win implements Comparable<Win> {
 			return -1;
 		}
 		return size.compareTo(other.size);
+	}
+	
+	@Override
+	public Win clone(){
+		return Win.of(size.toString());
+	}
+	
+	public Win multiply(BigDecimal value){
+		return Win.of(size.multiply(value));
 	}
 }

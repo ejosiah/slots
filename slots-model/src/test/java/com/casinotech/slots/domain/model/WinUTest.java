@@ -28,5 +28,15 @@ public class WinUTest {
 		assertTrue(ten.compareTo(two) > 0);
 		assertTrue(two.compareTo(ten) < 0);
 	}
+	
+	@Test
+	public void testClone(){
+		fail("Not yet implemented!");
+	}
+	
+	@Test
+	public void testMultiply(){
+		fail("Not yet implemented!");
+	}
 
 }

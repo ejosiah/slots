@@ -89,16 +89,6 @@ public class PayoutCombosUTest {
 	}
 	
 	@Test
-	public void testForLineSpecificPayoutCombo(){
-		fail("Not yet implemented!");
-	}
-	
-	@Test
-	public void testForCoinSpecificPayoutCombo(){
-		fail("Not yet implemented!");
-	}
-	
-	@Test
 	public void testForWildMutiplierPayoutCombo(){
 		fail("Not yet implemented!");
 	}

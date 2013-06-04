@@ -86,7 +86,7 @@ public final class TestHelper {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		loadLines();
+		System.out.println(loadPayout());
 	}
 	
 	public static List<PayoutCombo> loadPayout(){
