@@ -1,9 +1,8 @@
 package gamesoft.slots.domain.model;
 
 import static org.junit.Assert.*;
+import static gamesoft.slots.domain.model.TestHelper.*;
 import static org.mockito.Mockito.*;
-
-import gamesoft.slots.domain.model.Lines;
 import gamesoft.slots.domain.model.PayoutCombo;
 import gamesoft.slots.domain.model.PayoutCombos;
 import gamesoft.slots.domain.model.Query;
@@ -12,8 +11,6 @@ import gamesoft.slots.domain.model.Symbol;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,17 +20,15 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class PayoutCombosUTest {
 	
-	private List<PayoutCombo> combos = TestHelper.loadPayout();
-	private List<Symbol> symbols = TestHelper.payoutSymbols();
+	private static final int NO_PAYOUT_ID = Integer.MAX_VALUE;
 
 	@Mock Query query;
-	@Mock Lines lines;
 	
 	private PayoutCombos payoutCombos;
 	
 	@Before
 	public void setup(){
-		payoutCombos = new PayoutCombos(combos, lines);
+		payoutCombos = new PayoutCombos(new ArrayList<>(combos.values()));
 	}
 
 	@Test
@@ -49,7 +44,7 @@ public class PayoutCombosUTest {
 	
 	@Test
 	public void testNoExsitentPayout(){
-		when(query.id()).thenReturn(25);
+		when(query.id()).thenReturn(NO_PAYOUT_ID);
 		
 		PayoutCombo expected = PayoutCombo.NO_PAYOUT;
 		PayoutCombo actual = payoutCombos.getPayoutComboFor(query);
@@ -58,17 +53,26 @@ public class PayoutCombosUTest {
 	}
 	
 	@Test
-	public void testFindPayoutComboForReelsLineNumberOfCoinsAndLineHelper(){
-		Symbol symbol1 = symbols.get(0);
-		List<List<Symbol>> reels = buildWinningCombo();
+	public void testNoPayout(){
+		Symbol symbol9 = symbols.get(9);
+		List<Symbol> symbolsOnLine = Arrays.asList(symbol9, symbol9);
+		when(query.symbols()).thenReturn(symbolsOnLine);
+		when(query.id()).thenReturn(null);
+		
+		PayoutCombo expected = PayoutCombo.NO_PAYOUT;
+		PayoutCombo actual = payoutCombos.getPayoutComboFor(query);
+		
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testFindPayoutComboForSymbols(){
+		List<Symbol> symbolsOnLine = buildSymbolsOnLine();
 		
 		when(query.id()).thenReturn(null);
-		when(query.symbols()).thenReturn(reels);
+		when(query.symbols()).thenReturn(symbolsOnLine);
 		when(query.numberOfCoins()).thenReturn(null);
-		when(query.line()).thenReturn(3);
-		
-		when(lines.symbolsForLine(3, reels))
-			.thenReturn(Arrays.asList(symbol1, symbol1, symbol1, symbol1, symbol1));
+		when(query.line()).thenReturn(null);
 		
 		PayoutCombo expected = combos.get(0);
 		PayoutCombo actual = payoutCombos.getPayoutComboFor(query);
@@ -77,21 +81,41 @@ public class PayoutCombosUTest {
 		
 	}
 	
-	public List<List<Symbol>> buildWinningCombo(){
-		List<List<Symbol>> reels = new ArrayList<>();
-		List<Symbol> reel1 = Arrays.asList(symbols.get(0), symbols.get(1), symbols.get(3));
-		List<Symbol> reel2 = Arrays.asList(symbols.get(7), symbols.get(0), symbols.get(6));
-		List<Symbol> reel3 = Arrays.asList(symbols.get(2), symbols.get(8), symbols.get(0));
-		List<Symbol> reel4 = Arrays.asList(symbols.get(4), symbols.get(0), symbols.get(3));
-		List<Symbol> reel5 = Arrays.asList(symbols.get(0), symbols.get(5), symbols.get(4));
+	@Test
+	public void testFindLineSpecificPayoutCombo(){
+		Symbol symbol3 = symbols.get(3);
+		List<Symbol> symbolsOnLine = Arrays.asList(symbol3, symbol3, symbol3);
 		
-		reels.add(reel1);
-		reels.add(reel2);
-		reels.add(reel3);
-		reels.add(reel4);
-		reels.add(reel5);
+		when(query.id()).thenReturn(null);
+		when(query.symbols()).thenReturn(symbolsOnLine);
+		when(query.numberOfCoins()).thenReturn(null);
+		when(query.line()).thenReturn(4);
 		
-		return reels;
+		PayoutCombo expected = combos.get(30);
+		PayoutCombo actual = payoutCombos.getPayoutComboFor(query);
+		
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testFindCoinSpecificPayoutCombo(){
+		Symbol symbol5 = symbols.get(5);
+		List<Symbol> symbolsOnLine = Arrays.asList(symbol5, symbol5, symbol5);
+		
+		when(query.id()).thenReturn(null);
+		when(query.symbols()).thenReturn(symbolsOnLine);
+		when(query.numberOfCoins()).thenReturn(20);
+		when(query.line()).thenReturn(null);
+		
+		PayoutCombo expected = combos.get(31);
+		PayoutCombo actual = payoutCombos.getPayoutComboFor(query);
+		
+		assertEquals(expected, actual);
+	}
+	
+	public List<Symbol> buildSymbolsOnLine(){
+		Symbol symbol1 = symbols.get(1);
+		return Arrays.asList(symbol1 , symbol1, symbol1, symbol1, symbol1);
 	}
 	
 	@Test

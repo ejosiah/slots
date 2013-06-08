@@ -2,7 +2,6 @@ package gamesoft.slots.domain.model;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -11,13 +10,12 @@ import java.util.Map;
 public class PayoutCombos {
 	
 	private final Map<Integer, PayoutCombo> payoutCombos = new HashMap<Integer, PayoutCombo>();
-	private final Lines lines;
+	private static final Integer IGNORE = null;
 	
-	public PayoutCombos(List<PayoutCombo> payoutCombos, Lines lines) {
+	public PayoutCombos(List<PayoutCombo> payoutCombos) {
 		for(PayoutCombo payoutCombo : payoutCombos){
 			this.payoutCombos.put(payoutCombo.id(), payoutCombo);
 		}
-		this.lines = lines;
 	}
 
 	public PayoutCombo getPayoutComboFor(Query query){
@@ -35,20 +33,19 @@ public class PayoutCombos {
 		return payoutCombos.get(id);
 	}
 	
-	private PayoutCombo getPayoutComboFor(List<List<Symbol>> reels, Integer line
+	private PayoutCombo getPayoutComboFor(List<Symbol> symbols, Integer line
 			, Integer numberOfCoins, BigDecimal wildMultiplier) {
 		
-		List<Symbol> symbols = lines.symbolsForLine(line, reels);
-		List<PayoutCombo> matchingPayoutCombos = matchingPayoutCombos( symbols, numberOfCoins);
+		List<PayoutCombo> matchingPayoutCombos = matchingPayoutCombos(symbols, numberOfCoins, line);
 		
 		if(matchingPayoutCombos.size() == 0){
 			return null;
 		}
-
-		return matchingPayoutCombos.get(0);
+		int biggestPayout = matchingPayoutCombos.size() - 1;
+		return matchingPayoutCombos.get(biggestPayout);
 	}
 
-	private List<PayoutCombo> matchingPayoutCombos(List<Symbol> symbols, Integer numberOfCoins){
+	private List<PayoutCombo> matchingPayoutCombos(List<Symbol> symbols, Integer coins, Integer line){
 		
 		List<PayoutCombo> combos = new ArrayList<>(payoutCombos.values());
 		Collections.sort(combos);
@@ -56,17 +53,20 @@ public class PayoutCombos {
 		List<PayoutCombo> matchingCombos = new ArrayList<>();
 		
 		for(PayoutCombo combo : combos){
-			if(combo.matches(symbols)){
+			if(match(combo, symbols, coins, line)){
 				matchingCombos.add(combo);
 			}
 		}
 		return matchingCombos;
 	}
 	
-	
-	private PayoutCombo bestPayoutComb(List<PayoutCombo> PayoutCombos
-			, List<Symbol> symbols, BigDecimal wildMultiplier) {
-		return null;
+	private boolean match(PayoutCombo combo, List<Symbol> symbols, Integer coins, Integer line){
+		if(line != null){
+			return combo.matches(symbols, line);
+		}else if(coins != null){
+			return combo.matches(symbols, IGNORE, coins);
+		}else{
+			return combo.matches(symbols);
+		}
 	}
-
 }

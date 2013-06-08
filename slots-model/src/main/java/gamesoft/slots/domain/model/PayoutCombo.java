@@ -1,9 +1,14 @@
 package gamesoft.slots.domain.model;
 
+import gamesoft.random.RandomNumberGenerator;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.inject.Inject;
+
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -19,6 +24,7 @@ public class PayoutCombo implements Comparable<PayoutCombo> {
 	private final boolean ignoreWild;
 	private final Integer line;
 	private final Integer coins;
+
 	
 	private PayoutCombo(Integer id, Integer occurrence, Win win, List<Symbol> symbols, boolean ignoreWild, Integer line, Integer coins){
 		this.id = id;
@@ -61,20 +67,46 @@ public class PayoutCombo implements Comparable<PayoutCombo> {
 	}
 
 	private int count(List<Symbol> symbols) {
-		boolean fromLeft = true;
-		boolean fromRight = !fromLeft;
-		boolean anyDirection = RNGHolder.RNG().nextBoolean();
-		
 		switch(symbols.get(0).order()){
 		case FROM_LEFT :
-			return count(symbols, fromLeft);
+			return countFromLeft(symbols);
 		case FROM_RIGHT :
-			return count(symbols, fromRight);
+			return countFromRight(symbols);
 		case ANY_DIRECTION :
-			return count(symbols, anyDirection);
+			return countFromAnyDirection(symbols);
 		default:
 			throw new IllegalArgumentException("Unknown order");
 		}
+	}
+	
+	private int countFromLeft(List<Symbol> symbols){
+		for(int i = 0; i < symbols.size(); i++){
+			Symbol currentSymbol = symbols.get(i);
+			if(NoMatchFor(currentSymbol)){
+				return i;
+			}
+		}
+		return symbols.size();
+	}
+	
+	private int countFromRight(List<Symbol> symbols){
+		for(int start = symbols.size() - 1, i = start; i >= 0; i--){
+			Symbol currentSymbol = symbols.get(i);
+			if(NoMatchFor(currentSymbol)){
+				return start - i;
+			}
+		}
+		return symbols.size();
+	}
+	
+	private int countFromAnyDirection(List<Symbol> symbols){
+		int occurrence = countFromLeft(symbols);
+		return occurrence != this.occurrence ? countFromRight(symbols) : occurrence;
+	}
+	
+	private boolean NoMatchFor(Symbol symbol){
+		return ((ignoreWild && symbol.isWild()) 
+				|| !this.contains(symbol) && !symbol.isWild());
 	}
 
 	private int count(List<Symbol> symbols, boolean fromLeft) {
@@ -85,7 +117,7 @@ public class PayoutCombo implements Comparable<PayoutCombo> {
 			Symbol currentSymbol = symbols.get(i);
 			if((ignoreWild && currentSymbol.isWild()) 
 					|| !this.contains(currentSymbol) && !currentSymbol.isWild()){
-				return i;
+				return fromLeft ? i : start - i;
 			}
 			i = fromLeft ? i+1 : i-1;
 		}

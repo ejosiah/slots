@@ -17,7 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.casinotech.random.RandomNumberGenerator;
+import gamesoft.random.RandomNumberGenerator;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StripSpinnerUTest {
@@ -33,13 +33,14 @@ public class StripSpinnerUTest {
 	@Before
 	public void setUp() throws Exception {
 		reel = new Reel(0, TestHelper.loadSymbols(), null);
+		ReflectionTestUtils.setFiled("rng", reel, mockRNG);
 	}
 
 
 	@Test
 	public void testSpin() {
 		long numberOfSymbols = reel.numberOfSymbols();
-		when(mockRNG.nextLong(numberOfSymbols)).thenReturn(9L);
+		when(mockRNG.nextLong(numberOfSymbols)).thenReturn(10L);
 		
 		List<Symbol> expected = expected();
 		List<Symbol> actual = spinner.spin(reel, 3);
@@ -60,7 +61,7 @@ public class StripSpinnerUTest {
 	@Test
 	public void testWrapAroundSpin(){
 		long numberOfSymbols = reel.numberOfSymbols();
-		when(mockRNG.nextLong(numberOfSymbols)).thenReturn(74L);
+		when(mockRNG.nextLong(numberOfSymbols)).thenReturn(75L);
 		
 		List<Symbol> expected = wrappedExpected();
 		List<Symbol> actual = spinner.spin(reel, 3);

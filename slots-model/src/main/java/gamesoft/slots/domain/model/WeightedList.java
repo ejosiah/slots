@@ -1,14 +1,12 @@
 package gamesoft.slots.domain.model;
 
+import gamesoft.random.RandomNumberGenerator;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
-import com.casinotech.random.RandomNumberGenerator;
 
 public class WeightedList<T extends Weighted> {
 	private static final Comparator<Weighted> COMPARATOR = new weightedComparator();

@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -22,8 +23,59 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import lombok.Cleanup;
+import lombok.SneakyThrows;
 
 public final class TestHelper {
+	
+	public static Map<Integer, Symbol> symbols = new LinkedHashMap<>();
+	public static Map<Integer, PayoutCombo> combos = new LinkedHashMap<>();
+	
+	static {
+		Map<String, Object> slotConfig = loadSlotConfig();
+		List<Map> symbolConfigs = (List<Map>) slotConfig.get("symbols");
+		
+		for(Map symbolConfig : symbolConfigs){
+			
+			boolean isWild = symbolConfig.get("wild") != null ? true : false;
+			int id = new Integer(symbolConfig.get("id").toString());
+			String code = symbolConfig.get("code").toString();
+		
+			if(isWild){
+				symbols.put(id, Symbol.wildSymbol(id, code, 0));
+			}else{
+				symbols.put(id, Symbol.newSymbol(id, code, 0));
+			}
+		}
+		
+		List<Map> payouts = (List<Map>)slotConfig.get("payoutCombos");
+		
+		for(Map payout : payouts){
+			int id = new Integer(payout.get("id").toString());
+			Symbol symbol = payout.containsKey("symbol") ? symbols.get(new Integer(payout.get("symbol").toString())) : null;
+			int occurrence = new Integer(payout.get("occurrence").toString());
+			Win win = Win.of(payout.get("win").toString());
+			PayoutCombo combo = null;
+			
+			if(payout.containsKey("line")){
+				int line = new Integer(payout.get("line").toString());
+				combo = PayoutCombo.lineSpecificCombo(id, occurrence, win, symbol, line);
+			}else if(payout.containsKey("coins")){
+				int coins = new Integer(payout.get("coins").toString());
+				combo = PayoutCombo.coinsSpecificCombo(id, occurrence, win, symbol, coins);
+			}else if(symbol == null){
+				List<Integer> symbolIds = (List<Integer>) payout.get("symbols");
+				List<Symbol> payoutSybmols = new ArrayList<>();
+				for(Integer sid : symbolIds){
+					payoutSybmols.add(symbols.get(sid));
+				}
+				combo = PayoutCombo.mixedCombo(id, occurrence, win, payoutSybmols);
+			}
+			else{
+				combo = PayoutCombo.createCombo(id, occurrence, win, symbol);
+			}
+			combos.put(id, combo);
+		}
+	}
 
 	public static List<Symbol> loadSymbols() {		
 		
@@ -90,7 +142,6 @@ public final class TestHelper {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		System.out.println(loadPayout());
 	}
 	
 	public static List<PayoutCombo> loadPayout(){
@@ -139,6 +190,12 @@ public final class TestHelper {
 		Map json = new ObjectMapper().readValue(src, Map.class);
 		
 		System.out.println(json.get("lines"));
+	}
+	
+	@SneakyThrows
+	private static Map<String, Object> loadSlotConfig(){
+		InputStream src = TestHelper.class.getResourceAsStream("/payoutCombos.js");
+		return new ObjectMapper().readValue(src, Map.class);
 	}
 	
 }

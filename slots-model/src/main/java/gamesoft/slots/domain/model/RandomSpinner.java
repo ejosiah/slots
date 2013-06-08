@@ -1,12 +1,16 @@
 package gamesoft.slots.domain.model;
 
+import gamesoft.random.RandomNumberGenerator;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.casinotech.random.RandomNumberGenerator;
+import javax.inject.Inject;
+
 
 public class RandomSpinner implements Spinner {
 	
+	@Inject
 	private RandomNumberGenerator rng;
 
 	public List<Symbol> spin(Reel reel, int size) {

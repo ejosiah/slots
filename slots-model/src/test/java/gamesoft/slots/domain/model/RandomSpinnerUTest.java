@@ -21,7 +21,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
-import com.casinotech.random.RandomNumberGenerator;
+import gamesoft.random.RandomNumberGenerator;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RandomSpinnerUTest {

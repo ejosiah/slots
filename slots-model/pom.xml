@@ -43,7 +43,7 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.casinotech</groupId>
+			<groupId>gamesoft</groupId>
 			<artifactId>random</artifactId>
 		</dependency>
 		<dependency>
@@ -61,6 +61,10 @@
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
 		</dependency>
 	</dependencies>
 </project>

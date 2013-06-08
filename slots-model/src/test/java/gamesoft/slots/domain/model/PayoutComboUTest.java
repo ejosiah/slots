@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import gamesoft.slots.domain.model.PayoutCombo;
-import gamesoft.slots.domain.model.RNGHolder;
 import gamesoft.slots.domain.model.Symbol;
 import gamesoft.slots.domain.model.Win;
 
@@ -13,13 +12,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import com.casinotech.random.RandomNumberGenerator;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PayoutComboUTest {
@@ -27,30 +22,22 @@ public class PayoutComboUTest {
 	private Win win = Win.of("10");
 	private PayoutCombo payoutCombo;
 
-	@Mock RandomNumberGenerator rng;
-	
-	@Before
-	public void setup(){
-		RNGHolder holder = new RNGHolder();
-		holder.setRNG(rng);
-	}
-
 	@Test
 	public void testMatchsFromLeft() {
 		Symbol symbol1 = Symbol.newSymbol(1, "SYMBOL_1", 0);
 		Symbol symbol2 = Symbol.newSymbol(2, "SYMBOL_2", 1);
 		Symbol wild = Symbol.wildSymbol(0, "WILD", 2);
 		
-		payoutCombo = PayoutCombo.createCombo(0, 5, win, symbol1);
+		payoutCombo = PayoutCombo.createCombo(0, 4, win, symbol1);
 		
 		List<Symbol> symbols = new ArrayList<>();
-		symbols.addAll(Arrays.asList(symbol1, symbol1, symbol1, symbol1, symbol1));
+		symbols.addAll(Arrays.asList(symbol1, symbol1, symbol1, symbol1, symbol2));
 		
 		boolean matches = payoutCombo.matches(symbols);
 		assertTrue(matches);
 		
 		symbols.clear();
-		symbols.addAll(Arrays.asList(symbol1, wild, symbol1, symbol1, wild));
+		symbols.addAll(Arrays.asList(symbol1, wild, symbol1, symbol1, symbol2));
 		
 		matches = payoutCombo.matches(symbols);
 		assertTrue(matches);
@@ -98,8 +85,7 @@ public class PayoutComboUTest {
 		Symbol wild = Symbol.wildSymbol(0, "WILD", 2);
 		
 		payoutCombo = PayoutCombo.ignoreWildCombo(0, 5, win, symbol1);
-		when(rng.nextBoolean()).thenReturn(true);
-		
+				
 		List<Symbol> symbols = new ArrayList<>();
 		symbols.addAll(Arrays.asList(symbol1, symbol1, wild, symbol1, symbol1));
 		
@@ -114,16 +100,16 @@ public class PayoutComboUTest {
 		Symbol symbol2 = Symbol.newSymbolFromRight(2, "SYMBOL_2", 1);
 		Symbol wild = Symbol.wildSymbolFromRight(0, "WILD", 2);
 		
-		payoutCombo = PayoutCombo.createCombo(0, 5, win, symbol1);
+		payoutCombo = PayoutCombo.createCombo(0, 4, win, symbol1);
 		
 		List<Symbol> symbols = new ArrayList<>();
-		symbols.addAll(Arrays.asList(symbol1, symbol1, symbol1, symbol1, symbol1));
+		symbols.addAll(Arrays.asList(symbol2, symbol1, symbol1, symbol1, symbol1));
 		
 		boolean matches = payoutCombo.matches(symbols);
 		assertTrue(matches);
 		
 		symbols.clear();
-		symbols.addAll(Arrays.asList(symbol1, wild, symbol1, symbol1, wild));
+		symbols.addAll(Arrays.asList(symbol2, wild, symbol1, symbol1, wild));
 		
 		matches = payoutCombo.matches(symbols);
 		assertTrue(matches);
@@ -137,31 +123,30 @@ public class PayoutComboUTest {
 	
 	@Test
 	public void testMatchsFromAnyDirection() {
-		Symbol symbol1 = Symbol.newSymbolFromRight(1, "SYMBOL_1", 0);
-		Symbol symbol2 = Symbol.newSymbolFromRight(2, "SYMBOL_2", 1);
-		Symbol wild = Symbol.wildSymbolFromRight(0, "WILD", 2);
+		Symbol symbol1 = Symbol.newSymbolFromAnyDirection(1, "SYMBOL_1", 0);
+		Symbol symbol2 = Symbol.newSymbolFromAnyDirection(2, "SYMBOL_2", 1);
+		Symbol wild = Symbol.wildSymbolFromAnyDirection(0, "WILD", 2);
 		
-		payoutCombo = PayoutCombo.createCombo(0, 5, win, symbol1);
-		
-		when(rng.nextBoolean()).thenReturn(false);
-		
+		payoutCombo = PayoutCombo.createCombo(0, 4, win, symbol1);
+				
 		List<Symbol> symbols = new ArrayList<>();
-		symbols.addAll(Arrays.asList(symbol1, symbol1, symbol1, symbol1, symbol1));
+		symbols.addAll(Arrays.asList(symbol1, symbol1, symbol1, symbol1, symbol2));
 		
 		boolean matches = payoutCombo.matches(symbols);
 		assertTrue(matches);
+
 		
 		symbols.clear();
-		symbols.addAll(Arrays.asList(symbol1, wild, symbol1, symbol1, wild));
+		symbols.addAll(Arrays.asList(symbol2, symbol1, symbol1, symbol1, symbol1));
 		
 		matches = payoutCombo.matches(symbols);
 		assertTrue(matches);
 		
 		symbols.clear();
-		symbols.addAll(Arrays.asList(symbol1, symbol2, symbol1, symbol1, symbol2));
+		symbols.addAll(Arrays.asList(symbol2, symbol1, symbol1, symbol1, wild));
 		
 		matches = payoutCombo.matches(symbols);
-		assertFalse(matches);
+		assertTrue(matches);
 	}
 
 	@Test

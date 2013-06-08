@@ -17,7 +17,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.casinotech.random.RandomNumberGenerator;
+import gamesoft.random.RandomNumberGenerator;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WeightedListUTest {

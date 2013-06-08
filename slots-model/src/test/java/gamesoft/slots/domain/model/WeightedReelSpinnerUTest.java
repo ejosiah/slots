@@ -17,7 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.casinotech.random.RandomNumberGenerator;
+import gamesoft.random.RandomNumberGenerator;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WeightedReelSpinnerUTest {
@@ -33,6 +33,7 @@ public class WeightedReelSpinnerUTest {
 	@Before
 	public void setUp() throws Exception {
 		reel = new Reel(0, TestHelper.weightedloadSymbols(), null);
+		ReflectionTestUtils.setFiled("rng", reel, mockRNG);
 	}
 
 

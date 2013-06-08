@@ -1,7 +1,11 @@
 package gamesoft.slots.domain.model;
 
+import gamesoft.random.RandomNumberGenerator;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -12,6 +16,9 @@ public class Reel {
 	private final int index;
 	private final List<Symbol> symbols;
 	private final Spinner spinner;
+	
+	@Inject
+	private RandomNumberGenerator rng;
 	
 	public int numberOfSymbols(){
 		return symbols.size();
@@ -26,7 +33,7 @@ public class Reel {
 	}
 	
 	public Symbol randomSymbol(){
-		int index = RNGHolder.RNG().nextInt(numberOfSymbols());
+		int index = rng.nextInt(numberOfSymbols());
 		return symbolAt(index);
 	}
 	

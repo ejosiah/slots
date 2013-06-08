@@ -50,7 +50,7 @@
 				<version>1.9.5</version>
 			</dependency>
 			<dependency>
-				<groupId>com.casinotech</groupId>
+				<groupId>gamesoft</groupId>
 				<artifactId>random</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
@@ -73,6 +73,11 @@
 				<groupId>org.codehaus.jackson</groupId>
 				<artifactId>jackson-mapper-asl</artifactId>
 				<version>1.9.12</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.inject</groupId>
+				<artifactId>javax.inject</artifactId>
+				<version>1</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

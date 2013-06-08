@@ -3,7 +3,7 @@ package gamesoft.slots.domain.model;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.casinotech.random.NativeRandomNumberGenerator;
+import gamesoft.random.NativeRandomNumberGenerator;
 
 public class Main {
 	
