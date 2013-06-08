@@ -20,10 +20,10 @@ public class PayoutCombo implements Comparable<PayoutCombo> {
 	private final boolean ignoreWild;
 	private final Integer line;
 	private final Integer coins;
-	private final Order symbolOrder;
+	private final Direction payoutDirection;
 
 	
-	private PayoutCombo(Integer id, Integer occurrence, Win win, List<Symbol> symbols, boolean ignoreWild, Integer line, Integer coins, Order order){
+	private PayoutCombo(Integer id, Integer occurrence, Win win, List<Symbol> symbols, boolean ignoreWild, Integer line, Integer coins, Direction order){
 		this.id = id;
 		this.occurrence = occurrence;
 		this.win = win;
@@ -31,67 +31,67 @@ public class PayoutCombo implements Comparable<PayoutCombo> {
 		this.ignoreWild = ignoreWild;
 		this.line = line;
 		this.coins = coins;
-		this.symbolOrder = order;
+		this.payoutDirection = order;
 	}
 	
 	public static PayoutCombo createCombo(Integer id, Integer occurrence, Win win, Symbol symbol){
-		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), false, null, null, Order.FROM_LEFT);
+		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), false, null, null, Direction.FROM_LEFT);
 	}
 	
 	public static PayoutCombo ignoreWildCombo(Integer id, Integer occurrence, Win win, Symbol symbol){
-		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), true, null, null, Order.FROM_LEFT);
+		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), true, null, null, Direction.FROM_LEFT);
 	}
 	
 	public static PayoutCombo lineSpecificCombo(Integer id, Integer occurrence, Win win, Symbol symbol, int line){
-		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), false, line, null, Order.FROM_LEFT);
+		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), false, line, null, Direction.FROM_LEFT);
 	}
 
 	public static PayoutCombo coinsSpecificCombo(Integer id, Integer occurrence, Win win, Symbol symbol, int coins){
-		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), false, null, coins, Order.FROM_RIGHT);
+		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), false, null, coins, Direction.FROM_RIGHT);
 	}
 
 	public static PayoutCombo mixedCombo(Integer id, Integer occurrence, Win win, List<Symbol> symbols){
-		return new PayoutCombo(id, occurrence, win, symbols, false, null, null, Order.FROM_LEFT);
+		return new PayoutCombo(id, occurrence, win, symbols, false, null, null, Direction.FROM_LEFT);
 	}
 	
 	public static PayoutCombo createComboFromRight(Integer id, Integer occurrence, Win win, Symbol symbol){
-		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), false, null, null, Order.FROM_RIGHT);
+		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), false, null, null, Direction.FROM_RIGHT);
 	}
 	
 	public static PayoutCombo ignoreWildComboFromRight(Integer id, Integer occurrence, Win win, Symbol symbol){
-		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), true, null, null, Order.FROM_RIGHT);
+		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), true, null, null, Direction.FROM_RIGHT);
 	}
 	
 	public static PayoutCombo lineSpecificComboFromRight(Integer id, Integer occurrence, Win win, Symbol symbol, int line){
-		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), false, line, null, Order.FROM_RIGHT);
+		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), false, line, null, Direction.FROM_RIGHT);
 	}
 	
 	public static PayoutCombo coinsSpecificComboFromRight(Integer id, Integer occurrence, Win win, Symbol symbol, int coins){
-		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), false, null, coins, Order.FROM_RIGHT);
+		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), false, null, coins, Direction.FROM_RIGHT);
 	}
 	
 	public static PayoutCombo mixedComboFromRight(Integer id, Integer occurrence, Win win, List<Symbol> symbols){
-		return new PayoutCombo(id, occurrence, win, symbols, false, null, null, Order.FROM_RIGHT);
+		return new PayoutCombo(id, occurrence, win, symbols, false, null, null, Direction.FROM_RIGHT);
 	}
 	
 	public static PayoutCombo createComboFromAnyDirection(Integer id, Integer occurrence, Win win, Symbol symbol){
-		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), false, null, null, Order.ANY_DIRECTION);
+		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), false, null, null, Direction.ANY);
 	}
 	
 	public static PayoutCombo ignoreWildComboFromAnyDirection(Integer id, Integer occurrence, Win win, Symbol symbol){
-		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), true, null, null, Order.ANY_DIRECTION);
+		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), true, null, null, Direction.ANY);
 	}
 	
 	public static PayoutCombo lineSpecificComboFromAnyDirection(Integer id, Integer occurrence, Win win, Symbol symbol, int line){
-		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), false, line, null, Order.ANY_DIRECTION);
+		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), false, line, null, Direction.ANY);
 	}
 	
 	public static PayoutCombo coinsSpecificComboFromAnyDirection(Integer id, Integer occurrence, Win win, Symbol symbol, int coins){
-		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), false, null, coins, Order.ANY_DIRECTION);
+		return new PayoutCombo(id, occurrence, win, Arrays.asList(symbol), false, null, coins, Direction.ANY);
 	}
 	
 	public static PayoutCombo mixedComboFromAnyDirection(Integer id, Integer occurrence, Win win, List<Symbol> symbols){
-		return new PayoutCombo(id, occurrence, win, symbols, false, null, null, Order.ANY_DIRECTION);
+		return new PayoutCombo(id, occurrence, win, symbols, false, null, null, Direction.ANY);
 	}
 	
 	public boolean matches(List<Symbol> symbols, Integer...optional){
@@ -104,12 +104,12 @@ public class PayoutCombo implements Comparable<PayoutCombo> {
 	}
 
 	private int count(List<Symbol> symbols) {
-		switch(symbolOrder){
+		switch(payoutDirection){
 		case FROM_LEFT :
 			return countFromLeft(symbols);
 		case FROM_RIGHT :
 			return countFromRight(symbols);
-		case ANY_DIRECTION :
+		case ANY :
 			return countFromAnyDirection(symbols);
 		default:
 			throw new IllegalArgumentException("Unknown order");

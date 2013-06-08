@@ -25,6 +25,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 
+@SuppressWarnings({"unchecked", "rawtypes"})
 public final class TestHelper {
 	
 	public static Map<Integer, Symbol> symbols = new LinkedHashMap<>();
@@ -54,28 +55,68 @@ public final class TestHelper {
 			Symbol symbol = payout.containsKey("symbol") ? symbols.get(new Integer(payout.get("symbol").toString())) : null;
 			int occurrence = new Integer(payout.get("occurrence").toString());
 			Win win = Win.of(payout.get("win").toString());
+			String orderStr = payout.containsKey("order") ? payout.get("order").toString() : "FROM_LEFT";
+			Direction direction = Direction.valueOf(orderStr);
 			PayoutCombo combo = null;
 			
 			if(payout.containsKey("line")){
 				int line = new Integer(payout.get("line").toString());
-				combo = PayoutCombo.lineSpecificCombo(id, occurrence, win, symbol, line);
+				switch(direction){
+				case FROM_LEFT : 
+					combo = PayoutCombo.lineSpecificCombo(id, occurrence, win, symbol, line);
+					break;
+				case FROM_RIGHT:
+					combo = PayoutCombo.lineSpecificComboFromRight(id, occurrence, win, symbol, line);
+					break;
+				case ANY:
+					combo = PayoutCombo.lineSpecificComboFromAnyDirection(id, occurrence, win, symbol, line);
+					break;
+				}
 			}else if(payout.containsKey("coins")){
 				int coins = new Integer(payout.get("coins").toString());
-				combo = PayoutCombo.coinsSpecificCombo(id, occurrence, win, symbol, coins);
+				switch(direction){
+				case FROM_LEFT :
+					combo = PayoutCombo.coinsSpecificCombo(id, occurrence, win, symbol, coins);
+					break;
+				case FROM_RIGHT :
+					combo = PayoutCombo.coinsSpecificComboFromRight(id, occurrence, win, symbol, coins);
+					break;
+				case ANY :
+					combo = PayoutCombo.coinsSpecificComboFromAnyDirection(id, occurrence, win, symbol, coins);
+					break;
+				}
 			}else if(symbol == null){
 				List<Integer> symbolIds = (List<Integer>) payout.get("symbols");
 				List<Symbol> payoutSybmols = new ArrayList<>();
 				for(Integer sid : symbolIds){
 					payoutSybmols.add(symbols.get(sid));
 				}
-				combo = PayoutCombo.mixedCombo(id, occurrence, win, payoutSybmols);
+				switch(direction){
+				case FROM_LEFT:
+					combo = PayoutCombo.mixedCombo(id, occurrence, win, payoutSybmols);
+					break;
+				case FROM_RIGHT:
+					combo = PayoutCombo.mixedComboFromRight(id, occurrence, win, payoutSybmols);
+					break;
+				case ANY:
+					combo = PayoutCombo.mixedComboFromAnyDirection(id, occurrence, win, payoutSybmols);
+					break;
+				}
 			}
 			else{
-				combo = PayoutCombo.createCombo(id, occurrence, win, symbol);
+				switch(direction){
+				case FROM_LEFT:
+					combo = PayoutCombo.createCombo(id, occurrence, win, symbol);
+				case FROM_RIGHT:
+					combo = PayoutCombo.createComboFromAnyDirection(id, occurrence, win, symbol);
+				case ANY:
+					combo = PayoutCombo.createComboFromAnyDirection(id, occurrence, win, symbol);
+				}
 			}
 			combos.put(id, combo);
 		}
 	}
+
 
 	public static List<Symbol> loadSymbols() {		
 		

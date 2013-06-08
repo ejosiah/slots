@@ -1,7 +1,7 @@
 package gamesoft.slots.domain.model;
 
-public enum Order {
+public enum Direction {
 	FROM_LEFT,
 	FROM_RIGHT,
-	ANY_DIRECTION;
+	ANY;
 }
