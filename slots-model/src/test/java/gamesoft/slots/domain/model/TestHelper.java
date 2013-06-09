@@ -21,10 +21,12 @@ import java.util.TreeSet;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.junit.Ignore;
 
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 
+@Ignore
 @SuppressWarnings({"unchecked", "rawtypes"})
 public final class TestHelper {
 	

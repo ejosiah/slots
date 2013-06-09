@@ -26,10 +26,6 @@ public class Win implements Comparable<Win>, Cloneable {
 		return new Win(size, false);
 	}
 	
-	public static Win progressiveWin(){
-		return PROGRESSSIVE;
-	}
-	
 	public static Win of(String size){
 		return new Win(new BigDecimal(size), false);
 	}
@@ -50,7 +46,7 @@ public class Win implements Comparable<Win>, Cloneable {
 	
 	@Override
 	public Win clone(){
-		return Win.of(size.toString());
+		return progressive ? this : Win.of(size.toString());
 	}
 	
 	public Win multiply(BigDecimal value){

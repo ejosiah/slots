@@ -33,12 +33,27 @@ public class WinUTest {
 	
 	@Test
 	public void testClone(){
-		fail("Not yet implemented!");
+		Win ten = Win.of(BigDecimal.TEN);
+		Win expected = ten;
+		Win actual = ten.clone();
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testCloneProgressive(){
+		Win win = Win.PROGRESSSIVE;
+		Win expected = win;
+		Win actual = win.clone();
+		assertEquals(expected, actual);
 	}
 	
 	@Test
 	public void testMultiply(){
-		fail("Not yet implemented!");
+		final BigDecimal MULTIPLIER = new BigDecimal("2");
+		Win win = Win.of("10");
+		Win expected = Win.of("20");
+		Win actual = win.multiply(MULTIPLIER);
+		assertEquals(expected, actual);
 	}
 
 }

@@ -110,8 +110,8 @@ public class PayoutCombo implements Comparable<PayoutCombo> {
 	public boolean matches(List<Symbol> symbols, Integer...optional){
 		switch(optional.length){
 			case 0: return count(symbols) == occurrence;
-			case 1: return count(symbols) == occurrence && line == optional[0];
-			case 2: return count(symbols) == occurrence && coins == optional[1];
+			case 1: return count(symbols) == occurrence && line.equals(optional[0]);
+			case 2: return count(symbols) == occurrence && coins.equals(optional[1]);
 			default: return false;
 		}
 	}
@@ -132,7 +132,7 @@ public class PayoutCombo implements Comparable<PayoutCombo> {
 	private int countFromLeft(List<Symbol> symbols){
 		for(int i = 0; i < symbols.size(); i++){
 			Symbol currentSymbol = symbols.get(i);
-			if(NoMatchFor(currentSymbol)){
+			if(noMatchFor(currentSymbol)){
 				return i;
 			}
 		}
@@ -142,7 +142,7 @@ public class PayoutCombo implements Comparable<PayoutCombo> {
 	private int countFromRight(List<Symbol> symbols){
 		for(int start = symbols.size() - 1, i = start; i >= 0; i--){
 			Symbol currentSymbol = symbols.get(i);
-			if(NoMatchFor(currentSymbol)){
+			if(noMatchFor(currentSymbol)){
 				return start - i;
 			}
 		}
@@ -150,11 +150,11 @@ public class PayoutCombo implements Comparable<PayoutCombo> {
 	}
 	
 	private int countFromAnyDirection(List<Symbol> symbols){
-		int occurrence = countFromLeft(symbols);
-		return occurrence != this.occurrence ? countFromRight(symbols) : occurrence;
+		int occurrences = countFromLeft(symbols);
+		return occurrences != this.occurrence ? countFromRight(symbols) : occurrences;
 	}
 	
-	private boolean NoMatchFor(Symbol symbol){
+	private boolean noMatchFor(Symbol symbol){
 		return ((ignoreWild && symbol.isWild()) 
 				|| !this.contains(symbol) && !symbol.isWild());
 	}

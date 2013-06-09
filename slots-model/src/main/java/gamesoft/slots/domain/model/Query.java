@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
 @Accessors(fluent=true)
 @SuppressWarnings("PMD.UnusedPrivateField")
 public class Query {
+	public static final Query NULL = new Query(null, null, null, null, null);
 	private final Integer id;
 	private final List<Symbol> symbols;
 	private final Integer line;

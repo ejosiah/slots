@@ -213,5 +213,12 @@ public class PayoutCombosUTest {
 		
 		assertEquals(expected, actual);
 	}
+	
+	@Test
+	public void testNoQuery(){
+		PayoutCombo expected = PayoutCombo.NO_PAYOUT;
+		PayoutCombo actual = payoutCombos.getPayoutComboFor(Query.NULL);
+		assertEquals(expected, actual);
+	}
 
 }

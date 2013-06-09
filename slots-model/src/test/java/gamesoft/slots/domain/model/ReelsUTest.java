@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -119,6 +120,21 @@ public class ReelsUTest {
 		symbols.add(Symbol.newSymbol(8, "SYMBOL_8", 12));
 		
 		return symbols;
+	}
+	
+	@Test
+	public void testNumberOfReels(){
+		Integer expected = 5;
+		Integer actual = reels.numberOfReels();
+		assertThat(actual, equalTo(expected));
+	}
+	
+	@Test
+	public void testNumberOfSymbolsForReel(){
+		when(mockReel3.numberOfSymbols()).thenReturn(55);
+		Integer expected = 55;
+		Integer actual = reels.numberOfSymbolsForReelWith(2);
+		assertThat(actual, equalTo(expected));
 	}
 
 }
