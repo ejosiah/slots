@@ -94,6 +94,18 @@ public class PayoutCombo implements Comparable<PayoutCombo> {
 		return new PayoutCombo(id, occurrence, win, symbols, false, null, null, Direction.ANY);
 	}
 	
+	public static PayoutCombo progressiveCombo(Integer id, Integer occcurence, Symbol symbol){
+		return new PayoutCombo(id, occcurence, Win.PROGRESSSIVE, Arrays.asList(symbol), false, null, null, Direction.FROM_LEFT);
+	}
+	
+	public static PayoutCombo progressiveComboFromRight(Integer id, Integer occcurence, Symbol symbol){
+		return new PayoutCombo(id, occcurence, Win.PROGRESSSIVE, Arrays.asList(symbol), false, null, null, Direction.FROM_RIGHT);
+	}
+	
+	public static PayoutCombo progressiveComboFromAnyDirection(Integer id, Integer occcurence, Symbol symbol){
+		return new PayoutCombo(id, occcurence, Win.PROGRESSSIVE, Arrays.asList(symbol), false, null, null, Direction.ANY);
+	}
+	
 	public boolean matches(List<Symbol> symbols, Integer...optional){
 		switch(optional.length){
 			case 0: return count(symbols) == occurrence;
@@ -104,7 +116,7 @@ public class PayoutCombo implements Comparable<PayoutCombo> {
 	}
 
 	private int count(List<Symbol> symbols) {
-		switch(payoutDirection){
+		switch(payoutDirection()){
 		case FROM_LEFT :
 			return countFromLeft(symbols);
 		case FROM_RIGHT :
@@ -152,7 +164,8 @@ public class PayoutCombo implements Comparable<PayoutCombo> {
 
 	@Override
 	public int compareTo(PayoutCombo other) {
-		return this.win().compareTo(other.win());
+		int result = this.win().compareTo(other.win());
+		return result == 0 ? occurrence.compareTo(other.occurrence) : result;
 	}
 
 	public boolean hasWild() {

@@ -3,9 +3,12 @@ package gamesoft.slots.domain.model;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import lombok.AllArgsConstructor;
 
 public class PayoutCombos {
 	
@@ -36,7 +39,7 @@ public class PayoutCombos {
 	private PayoutCombo getPayoutComboFor(List<Symbol> symbols, Integer line
 			, Integer numberOfCoins, BigDecimal wildMultiplier) {
 		
-		List<PayoutCombo> matchingPayoutCombos = matchingPayoutCombos(symbols, numberOfCoins, line);
+		List<PayoutCombo> matchingPayoutCombos = matchingPayoutCombos(symbols, numberOfCoins, line, wildMultiplier);
 		
 		if(matchingPayoutCombos.size() == 0){
 			return null;
@@ -45,7 +48,7 @@ public class PayoutCombos {
 		return matchingPayoutCombos.get(biggestPayout);
 	}
 
-	private List<PayoutCombo> matchingPayoutCombos(List<Symbol> symbols, Integer coins, Integer line){
+	private List<PayoutCombo> matchingPayoutCombos(List<Symbol> symbols, Integer coins, Integer line, BigDecimal wildMultiplier){
 		
 		List<PayoutCombo> combos = new ArrayList<>(payoutCombos.values());
 		Collections.sort(combos);
@@ -57,6 +60,7 @@ public class PayoutCombos {
 				matchingCombos.add(combo);
 			}
 		}
+		Collections.sort(matchingCombos, new Comparer(wildMultiplier));
 		return matchingCombos;
 	}
 	
@@ -68,5 +72,21 @@ public class PayoutCombos {
 		}else{
 			return combo.matches(symbols);
 		}
+	}
+	
+	@AllArgsConstructor
+	private static final class Comparer implements Comparator<PayoutCombo>{
+		private final BigDecimal wildMultiplier;
+
+		@Override
+		public int compare(PayoutCombo payout1, PayoutCombo payout2) {
+			int result = payout1.compareTo(payout2);
+			return result == 0 ? 
+				payout1.apply(wildMultiplier).compareTo(
+						payout2.apply(wildMultiplier))
+					: result;
+			
+		}
+		
 	}
 }

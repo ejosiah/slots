@@ -166,6 +166,23 @@ public class PayoutComboUTest {
 		
 		assertTrue(payoutCombo1.compareTo(payoutCombo2) > 0);
 		assertTrue(payoutCombo2.compareTo(payoutCombo1) < 0);
+		
+		PayoutCombo progressivePayout = PayoutCombo.progressiveCombo(0, 5, symbol);
+		
+		
+		assertTrue(progressivePayout.compareTo(payoutCombo2) > 0);
+		assertTrue(progressivePayout.compareTo(payoutCombo1) > 0);
+	}
+	
+	@Test
+	public void testLongerOfEqualMatchingPayoutsPicked(){
+		Symbol symbol = Symbol.newSymbol(1, "SYMBOL_1", 0);
+		Win win = Win.of("500");
+		
+		PayoutCombo payoutCombo1 = PayoutCombo.createCombo(0, 4, win, symbol);		
+		PayoutCombo payoutCombo2 = PayoutCombo.createCombo(0, 5, win, symbol);
+		
+		assertTrue(payoutCombo2.compareTo(payoutCombo1) > 0);
 	}
 	
 	
@@ -258,5 +275,18 @@ public class PayoutComboUTest {
 		
 		assertEquals(expected, actual);
 	}
+	
+	@Test
+	public void testPaysOutOnAllWilds(){
+		Symbol symbol = Symbol.newSymbol(1, "SYMOBL_", 0);
+		Symbol wild = Symbol.wildSymbol(0, "WILD", 0);
+		Win win = Win.of("1000");
+		
+		payoutCombo = PayoutCombo.createCombo(0, 5, win, symbol);
+		
+		boolean matches = payoutCombo.matches(Arrays.asList(wild, wild, wild, wild, wild));
+		assertTrue(matches);
+	}
+
 
 }
