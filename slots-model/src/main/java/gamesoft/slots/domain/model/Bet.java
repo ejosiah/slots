@@ -9,6 +9,7 @@ import lombok.ToString;
 
 @ToString
 @EqualsAndHashCode
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class Bet {
 	private final List<Integer> lines;
 	private final Coin coinSize;

@@ -8,8 +8,9 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 @Getter
-@Accessors(fluent=true)
 @ToString
+@Accessors(fluent=true)
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class Query {
 	private final Integer id;
 	private final List<Symbol> symbols;

@@ -12,6 +12,7 @@ import org.joda.money.Money;
 
 @Data
 @Accessors(fluent=true)
+@SuppressWarnings("PMD.UnusedPrivateField")
 class LineWin implements CashWin, Comparable<LineWin> {
 	
 	private final PayoutCombo payoutCombo;

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 @Data
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class Win implements Comparable<Win>, Cloneable {
 	
 	public static final Win NO_WIN = new Win(BigDecimal.ZERO, false);

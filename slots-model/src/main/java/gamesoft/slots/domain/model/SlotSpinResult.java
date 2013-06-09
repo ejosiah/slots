@@ -13,6 +13,7 @@ import org.joda.money.Money;
 
 @Getter
 @Accessors(fluent=true)
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class SlotSpinResult {
 	private final ReelSpinResult spinResult;
 	private final Bet bet;

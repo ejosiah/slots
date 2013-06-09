@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(fluent=true)
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class Anticipate {
 	private static final List<Boolean> EMPTY = new ArrayList<>();
 	public static final Anticipate NO_ANTICIPATE = new Anticipate(EMPTY, EMPTY);

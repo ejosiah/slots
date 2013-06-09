@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Accessors(fluent=true)
 @AllArgsConstructor
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class SlotConfig {
 	private final List<Integer> defaultLinesBets;
 	private final List<Integer> maxLineBets;

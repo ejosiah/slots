@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(fluent=true)
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class ModelResult {
 	private final List<SlotWin> wins;
 	private final Anticipate anticipate;

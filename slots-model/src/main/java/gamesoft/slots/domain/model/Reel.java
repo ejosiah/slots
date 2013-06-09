@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(fluent=true)
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class Reel {
 	private final int index;
 	private final List<Symbol> symbols;

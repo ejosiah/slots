@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(fluent=true)
 @EqualsAndHashCode(exclude="index")
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class Symbol implements Weighted {
 	private static final long EQUAL_WEIGHT = 1L;
 	

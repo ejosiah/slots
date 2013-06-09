@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(fluent=true)
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class PayoutCombo implements Comparable<PayoutCombo> {
 	private static final List<Symbol> NO_SYMBOLS = new ArrayList<>();
 	public static final PayoutCombo NO_PAYOUT = new PayoutCombo(null, null, Win.NO_WIN, NO_SYMBOLS, true, null, null, null);
