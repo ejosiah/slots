@@ -45,6 +45,8 @@ public class SlotUTest {
 	@Mock
 	private ReelSpinResultInterceptorChain interceptor;
 	
+	@Mock Forcer forcer;
+	
 	private Slot slot;
 
 	@Before
@@ -56,20 +58,15 @@ public class SlotUTest {
 	public void testSpin() {
 		when(reels.spin()).thenReturn(reelSpinResult);
 		when(model.result(reelSpinResult, bet)).thenReturn(modelResult);
-		when(interceptor.intercept(reelSpinResult)).thenReturn(reelSpinResult);
+		when(forcer.spin(interceptor, reels)).thenReturn(reelSpinResult);
 		when(bet.value()).thenReturn(Money.zero(CurrencyUnit.USD));
 		
-		SlotSpinResult result = slot.spin(bet);
-		verify(interceptor).intercept(reelSpinResult);
+		SlotSpinResult result = slot.spin(bet, forcer);
+		
 		assertEquals(modelResult, result.modelResult());
 		assertEquals(reelSpinResult, result.spinResult());
 		assertEquals(bet, result.bet());
 		
-	}
-	
-	@Test
-	public void testSpinForceResult(){
-		fail("Not yet implemented!");
 	}
 	
 	@Test

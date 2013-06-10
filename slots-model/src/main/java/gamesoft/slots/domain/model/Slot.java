@@ -1,7 +1,10 @@
 package gamesoft.slots.domain.model;
 
+import lombok.AccessLevel;
 import lombok.Delegate;
+import lombok.Getter;
 
+@Getter(AccessLevel.PACKAGE)
 public class Slot {
 	private final Reels reels;
 	private final ChainModel model;
@@ -24,8 +27,8 @@ public class Slot {
 		this.config = config;
 	}
 	
-	public SlotSpinResult spin(Bet bet){
-		ReelSpinResult spinResult = reelResultInterceptor.intercept(reels.spin());
+	public SlotSpinResult spin(Bet bet, Forcer forcer){
+		ReelSpinResult spinResult = forcer.spin(reelResultInterceptor, reels);
 		ModelResult modelResult = model.result(spinResult, bet);
 		
 		return new SlotSpinResult(bet, spinResult, modelResult);

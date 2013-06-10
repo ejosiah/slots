@@ -1,6 +1,7 @@
 package gamesoft.slots.domain.model;
 
 import java.util.List;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +15,7 @@ public class SlotConfig {
 	private final List<Integer> defaultLinesBets;
 	private final List<Integer> maxLineBets;
 	private final List<List<Symbol>> startingSymbols;
+	private final Map<Integer, Symbol> symbols;
 	private final int numberOfLines;
 	private final int maxCoinsPerLine;
 	
