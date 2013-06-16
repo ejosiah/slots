@@ -42,4 +42,14 @@ public class Reel {
 		return new ArrayList<>(symbols);
 	}
 
+	public int count(Symbol symbol) {
+		int count = 0;
+		for(Symbol reelSymbol : symbols){
+			if(reelSymbol.equals(symbol)){
+				count++;
+			}
+		}
+		return count;
+	}
+
 }

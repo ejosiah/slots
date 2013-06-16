@@ -3,12 +3,12 @@ package gamesoft.slots.domain.model;
 import java.math.BigDecimal;
 import java.util.List;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-@Getter
-@ToString
+@Data
 @Accessors(fluent=true)
 @SuppressWarnings("PMD.UnusedPrivateField")
 public class Query {

@@ -61,7 +61,7 @@ public class SlotSpinResultUTest {
 		result = new SlotSpinResult(bet, spinResult, modelResult);
 	}
 
-	private List<SlotWin> mockWins(){
+	private List<? extends SlotWin> mockWins(){
 		return Arrays.asList(mockScatterWin, lineWin1, lineWin2, mockBonusWin);		
 		
 	}

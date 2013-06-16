@@ -1,41 +1,53 @@
 package gamesoft.slots.domain.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import lombok.Data;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 import org.joda.money.Money;
 
+@Data
+@Accessors(fluent=true)
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class ScatterWin implements CashWin {
-
-	@Override
-	public String type() {
-		// TODO Auto-generated method stub
-		return null;
+	private static final String TYPE;
+	private final Money amount;
+	private final List<SymbolPosition> symbolPositions;
+	@Getter private BigDecimal multiplier = BigDecimal.ONE;
+	
+	static{
+		TYPE = ScatterWin.class.getSimpleName().replace("Win", "").toUpperCase();
 	}
-
+	
+	public ScatterWin(Money amount, List<SymbolPosition> symbolPositions){
+		this.amount = amount;
+		this.symbolPositions = new ArrayList<>(symbolPositions);
+	}
+	
 	@Override
 	public List<SymbolPosition> symbolPositions() {
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.unmodifiableList(symbolPositions);
 	}
-
+	
 	@Override
-	public Money amount() {
-		// TODO Auto-generated method stub
-		return null;
+	public String type() {
+		return TYPE;
+	}
+	
+	public Money amount(){
+		return amount.multipliedBy(multiplier, RoundingMode.UNNECESSARY);
 	}
 
 	@Override
 	public void multiplyBy(BigDecimal factor) {
-		// TODO Auto-generated method stub
+		multiplier = multiplier.multiply(factor);
 		
 	}
-
-	@Override
-	public BigDecimal multiplier() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 }

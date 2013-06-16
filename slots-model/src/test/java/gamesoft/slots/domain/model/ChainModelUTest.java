@@ -2,7 +2,7 @@ package gamesoft.slots.domain.model;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-import static gamesoft.slots.domain.model.Anticipate.NO_ANTICIPATE;
+import static gamesoft.slots.domain.model.Anticipate.NONE;
 import gamesoft.slots.domain.model.Anticipate;
 import gamesoft.slots.domain.model.Bet;
 import gamesoft.slots.domain.model.BonusWin;
@@ -49,9 +49,9 @@ public class ChainModelUTest {
 		when(model1.result(reelSpinResult, bet)).thenReturn(
 				new ModelResult(new ArrayList<SlotWin>(Arrays.asList(lineWin)), anticipate));
 		when(model2.result(reelSpinResult, bet)).thenReturn(
-				new ModelResult(new ArrayList<SlotWin>(Arrays.asList(scatterWin)), NO_ANTICIPATE));
+				new ModelResult(new ArrayList<SlotWin>(Arrays.asList(scatterWin)), NONE));
 		when(model3.result(reelSpinResult, bet)).thenReturn(
-				new ModelResult(new ArrayList<SlotWin>(Arrays.asList(bonusWin)), NO_ANTICIPATE));
+				new ModelResult(new ArrayList<SlotWin>(Arrays.asList(bonusWin)), NONE));
 		when(anticipate.anticipate()).thenReturn(new ArrayList<Boolean>());
 		when(anticipate.win()).thenReturn(new ArrayList<Boolean>());
 		

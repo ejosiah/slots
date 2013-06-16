@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 @SuppressWarnings("PMD.UnusedPrivateField")
 public class Anticipate {
 	private static final List<Boolean> EMPTY = new ArrayList<>();
-	public static final Anticipate NO_ANTICIPATE = new Anticipate(EMPTY, EMPTY);
+	public static final Anticipate NONE = new Anticipate(EMPTY, EMPTY);
 	
 	private final List<Boolean> anticipate;
 	private final List<Boolean> win;

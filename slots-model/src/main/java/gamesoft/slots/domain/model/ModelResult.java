@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 @Accessors(fluent=true)
 @SuppressWarnings("PMD.UnusedPrivateField")
 public class ModelResult {
-	private final List<SlotWin> wins;
+	private final List<? extends SlotWin> wins;
 	private final Anticipate anticipate;
 	
 	List<Boolean> anticipate(){

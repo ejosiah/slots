@@ -1,11 +1,14 @@
 package gamesoft.slots.domain.model;
 
+import static java.util.Collections.unmodifiableList;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Collections;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 import lombok.experimental.Accessors;
 
 import org.joda.money.Money;
@@ -15,22 +18,21 @@ import org.joda.money.Money;
 @SuppressWarnings("PMD.UnusedPrivateField")
 class LineWin implements CashWin, Comparable<LineWin> {
 	
+	@Getter(AccessLevel.NONE)
 	private final PayoutCombo payoutCombo;
 	private final Money amount;
-	private final int line;
+	private final Integer line;
 	private final List<SymbolPosition> symbolPositions;
-	private BigDecimal multiplier = BigDecimal.ONE;
+	@Getter private BigDecimal multiplier = BigDecimal.ONE;
 	private static final String TYPE;
 	
 	static{
 		TYPE = LineWin.class.getSimpleName().replace("Win", "").toUpperCase();
 	}
-	
-	public LineWin(PayoutCombo payoutCombo, Money amount, int line, List<SymbolPosition> symbolPositions){
-		this.payoutCombo = payoutCombo;
-		this.amount = amount;
-		this.line = line;
-		this.symbolPositions = symbolPositions;
+
+	@Override
+	public List<SymbolPosition> symbolPositions() {
+		return unmodifiableList(symbolPositions);
 	}
 
 	@Override
@@ -52,6 +54,10 @@ class LineWin implements CashWin, Comparable<LineWin> {
 	public void multiplyBy(BigDecimal factor) {
 		multiplier = multiplier.multiply(factor);
 		
+	}
+
+	public int numberOfSymbols() {
+		return payoutCombo.occurrence();
 	}
 
 }
