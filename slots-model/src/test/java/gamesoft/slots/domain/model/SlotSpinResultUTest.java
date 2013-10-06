@@ -47,6 +47,9 @@ public class SlotSpinResultUTest {
 	@Mock
 	private ScatterWin mockScatterWin;
 	
+	@Mock
+	private WinSizeCalculator winSizeCalculator;
+	
 	private LineWin lineWin1;
 	
 	private LineWin lineWin2;
@@ -58,7 +61,7 @@ public class SlotSpinResultUTest {
 		 when(bet.value()).thenReturn(money);
 		 lineWin1 = new LineWin(null ,Money.parse("USD 2.50"), 0, null);
 		 lineWin2 = new LineWin(null ,Money.parse("USD 0.50"), 0, null);
-		result = new SlotSpinResult(bet, spinResult, modelResult);
+		result = new SlotSpinResult(bet, spinResult, modelResult, winSizeCalculator);
 	}
 
 	private List<? extends SlotWin> mockWins(){
@@ -67,8 +70,8 @@ public class SlotSpinResultUTest {
 	}
 
 	@Test
-	public void testWinsClassOfT() {
-		 when(modelResult.wins()).thenReturn(mockWins());
+	public void testWinsForSubTypeOfSlotWin() {
+		 doReturn(mockWins()).when(modelResult).wins();
 		 when(bet.value()).thenReturn(money);
 		 
 		 LineWin actual = result.win(LineWin.class);
@@ -77,7 +80,8 @@ public class SlotSpinResultUTest {
 
 	@Test
 	public void testWins() {
-		when(modelResult.wins()).thenReturn(mockWins());
+		doReturn(mockWins()).when(modelResult).wins();
+		doReturn(mockWins()).when(modelResult).wins();
 		List<? extends SlotWin> expected = Arrays.asList(lineWin1, lineWin2);
 		List<? extends SlotWin> actual =  result.wins(LineWin.class);
 		assertEquals(expected, actual);
@@ -85,12 +89,20 @@ public class SlotSpinResultUTest {
 
 	@Test
 	public void testWinSize() {
-		fail("Not yet implemented");
+		Money totalWin = Money.parse("USD 13.00");
+		doReturn(mockWins()).when(modelResult).wins();
+		when(mockScatterWin.amount()).thenReturn(Money.parse("USD 10.00"));
+		when(winSizeCalculator.evaluate(bet, totalWin)).thenReturn(WinSize.MEDIUM);
+		
+		WinSize expected = WinSize.MEDIUM;
+		WinSize actual = result.winSize();
+		
+		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void testTotalWin() {
-		when(modelResult.wins()).thenReturn(mockWins());
+		doReturn(mockWins()).when(modelResult).wins();
 		when(mockScatterWin.amount()).thenReturn(Money.parse("USD 10.00"));
 		
 		Money expected = Money.parse("USD 13.00");
@@ -101,7 +113,7 @@ public class SlotSpinResultUTest {
 
 	@Test
 	public void testTotalWinClassOfQextendsCashWin() {
-		when(modelResult.wins()).thenReturn(mockWins());
+		doReturn(mockWins()).when(modelResult).wins();
 		
 		Money expected = Money.parse("USD 3.00");
 		
@@ -111,7 +123,7 @@ public class SlotSpinResultUTest {
 
 	@Test
 	public void testAddMultiplier() {
-		when(modelResult.wins()).thenReturn(mockWins());
+		doReturn(mockWins()).when(modelResult).wins();
 		
 		BigDecimal multiplier = new BigDecimal("2");
 		result.addMultiplier(multiplier);
@@ -135,7 +147,7 @@ public class SlotSpinResultUTest {
 
 	@Test
 	public void testHasWin() {
-		when(modelResult.wins()).thenReturn(mockWins());
+		doReturn(mockWins()).when(modelResult).wins();
 		when(mockScatterWin.amount()).thenReturn(Money.parse("USD 10.00"));
 		
 		assertTrue(result.hasWin());

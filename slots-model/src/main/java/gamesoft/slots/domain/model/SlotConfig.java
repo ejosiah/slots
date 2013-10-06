@@ -21,5 +21,7 @@ public class SlotConfig {
 	
 	// Reel config
 	private final Class<Spinner> spinnerType;
-	private final List<Object[][]> reels; 
+	private final List<Object[][]> reels;
+	
+	private final WinSizeCalculator winSizeCalculator;
 }

@@ -31,7 +31,7 @@ public class Slot {
 		ReelSpinResult spinResult = forcer.spin(reelResultInterceptor, reels);
 		ModelResult modelResult = model.result(spinResult, bet);
 		
-		return new SlotSpinResult(bet, spinResult, modelResult);
+		return new SlotSpinResult(bet, spinResult, modelResult, winSizeCalculator());
 	}
 
 

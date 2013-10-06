@@ -19,17 +19,21 @@ public class SlotSpinResult {
 	private final Bet bet;
 	private final ModelResult modelResult;
 	
+	private final WinSizeCalculator winSizeCalculator;
+	
 	@Getter(value=AccessLevel.PRIVATE) 
 	private final CurrencyUnit currency;
 	
 	@Getter(value=AccessLevel.PRIVATE) 
 	private BigDecimal winMultiplier = BigDecimal.ONE;
 	
-	public SlotSpinResult(Bet bet, ReelSpinResult spinResult, ModelResult modelResult){
+	public SlotSpinResult(Bet bet, ReelSpinResult spinResult, ModelResult modelResult
+			,WinSizeCalculator winSizeCalculator){
 		this.bet = bet;
 		this.spinResult = spinResult;
 		this.modelResult = modelResult;
 		this.currency = bet.value().getCurrencyUnit();
+		this.winSizeCalculator = winSizeCalculator;
 	}
 	
 	public <T extends SlotWin> T win(Class<T> type){
@@ -57,7 +61,7 @@ public class SlotSpinResult {
 	}
 	
 	public WinSize winSize(){
-		return null;
+		return winSizeCalculator.evaluate(bet, totalWin());
 	}
 	
 	public Money totalWin(){

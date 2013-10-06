@@ -4,6 +4,6 @@ import org.joda.money.Money;
 
 public interface WinSizeCalculator {
 	
-	WinSize calulate(Money bet, Money totalWin);
+	WinSize evaluate(Bet bet, Money totalWin);
 	
 }
