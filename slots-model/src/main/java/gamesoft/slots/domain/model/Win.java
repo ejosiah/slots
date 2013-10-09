@@ -45,7 +45,7 @@ public class Win implements Comparable<Win>, Cloneable {
 	}
 	
 	@Override
-	public Win clone(){
+	public Win clone() throws CloneNotSupportedException{
 		return progressive ? this : Win.of(size.toString());
 	}
 	

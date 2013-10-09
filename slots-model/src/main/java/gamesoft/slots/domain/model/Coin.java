@@ -10,7 +10,7 @@ import org.joda.money.Money;
 
 @ToString
 @EqualsAndHashCode
-@SuppressWarnings("PMD.UnusedPrivateField")
+@SuppressWarnings({"PMD.UnusedPrivateField"})
 public class Coin implements Comparable<Coin>{
 	private final Money value;
 	

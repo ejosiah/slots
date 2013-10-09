@@ -38,7 +38,7 @@ public class Reels {
 		for(int i = 0; i < reels.size(); i++){
 			result.add(reels.get(i).spin(symbolsPerReel.get(i)));
 		}
-		return new ReelSpinResult(result, result);
+		return ReelSpinResult.singleState(result);
 	}
 
 }

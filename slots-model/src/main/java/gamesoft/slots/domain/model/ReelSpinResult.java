@@ -1,7 +1,10 @@
 package gamesoft.slots.domain.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,16 +12,22 @@ import lombok.experimental.Accessors;
 
 
 @EqualsAndHashCode
-@AllArgsConstructor
+@AllArgsConstructor(access=AccessLevel.PACKAGE)
 @Accessors(fluent=true)
 @SuppressWarnings("PMD.UnusedPrivateField")
 public class ReelSpinResult {
+	public static final List<List<Symbol>> EMPTY_REEL = Collections.emptyList();
 	private final List<List<Symbol>> initialReels;
 	private final List<List<Symbol>> finalReels;
 	private final boolean dualState;
 	
-	public ReelSpinResult(List<List<Symbol>> initialReels, List<List<Symbol>> finalReels){
-		this(initialReels, finalReels, false);
+	public static ReelSpinResult singleState(List<List<Symbol>> reels){
+		return new ReelSpinResult(reels, reels, false);
+	}
+	
+	
+	public static ReelSpinResult dualState(List<List<Symbol>> initialReels, List<List<Symbol>> finalReels){
+		return new ReelSpinResult(initialReels, finalReels, true);
 	}
 	
 	public List<List<Symbol>> reels(){
@@ -30,14 +39,34 @@ public class ReelSpinResult {
 	}
 	
 	public int count(Symbol symbol){
-		return 0;
+		int result = 0;
+		for(List<Symbol> reel : reels()){
+			for(Symbol reelSymbol : reel){
+				if(symbol.equals(reelSymbol)){
+					result++;
+				}
+			}
+		}
+		return result;
 	}
 	
+	
 	public List<SymbolPosition> findPositionsOf(Symbol symbol){
-		return null;
+		List<SymbolPosition> symbolPositions = new ArrayList<>();
+		
+		for(int i = 0; i < reels().size(); i++){
+			for(int j = 0; j < reels().get(i).size(); j++){
+				Symbol reelSymbol = reels().get(i).get(j);
+				if(symbol.equals(reelSymbol)){
+					symbolPositions.add(new SymbolPosition(reelSymbol, i, j));
+				}
+			}
+		}
+		
+		return symbolPositions;
 	}
 	
 	public boolean contains(int reelIndex, Symbol symbol){
-		return false;
+		return reels().get(reelIndex).contains(symbol);
 	}
 }

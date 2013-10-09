@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import lombok.Data;
+import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 
 @Data
@@ -178,6 +179,7 @@ public class PayoutCombo implements Comparable<PayoutCombo> {
 		return false;
 	}
 	
+	@SneakyThrows(CloneNotSupportedException.class)
 	public Win apply(BigDecimal wildMultiplier){
 		if(hasWild()){
 			return win.clone();

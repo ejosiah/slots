@@ -76,7 +76,7 @@ public class ForcerUTest {
 				Arrays.asList(symbol5, symbol2, symbol4),
 				Arrays.asList(symbol7, symbol6, symbol5)
 				);
-		return new ReelSpinResult(symbols, symbols);
+		return ReelSpinResult.singleState(symbols);
 	}
 	
 	@Test

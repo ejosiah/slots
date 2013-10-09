@@ -16,6 +16,7 @@ import lombok.experimental.Accessors;
 @Getter
 @AllArgsConstructor
 @Accessors(fluent=true)
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class SlotModel implements Model {
 	private final PayoutCombos payoutCombos;
 	private final Lines lines;

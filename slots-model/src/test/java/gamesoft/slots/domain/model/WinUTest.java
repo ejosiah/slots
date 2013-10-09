@@ -32,7 +32,7 @@ public class WinUTest {
 	}
 	
 	@Test
-	public void testClone(){
+	public void testClone() throws Exception{
 		Win ten = Win.of(BigDecimal.TEN);
 		Win expected = ten;
 		Win actual = ten.clone();
@@ -40,7 +40,7 @@ public class WinUTest {
 	}
 	
 	@Test
-	public void testCloneProgressive(){
+	public void testCloneProgressive() throws Exception{
 		Win win = Win.PROGRESSSIVE;
 		Win expected = win;
 		Win actual = win.clone();

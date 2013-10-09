@@ -5,6 +5,7 @@ import lombok.Delegate;
 import lombok.Getter;
 
 @Getter(AccessLevel.PACKAGE)
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class Slot {
 	private final Reels reels;
 	private final ChainModel model;

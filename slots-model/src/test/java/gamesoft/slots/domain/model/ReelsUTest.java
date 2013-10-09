@@ -73,7 +73,7 @@ public class ReelsUTest {
 				reelResult4(),
 				reelResult5()));
 		
-		return new ReelSpinResult(result, result);
+		return ReelSpinResult.singleState(result);
 	}
 	
 	public List<Symbol> reelResult1(){

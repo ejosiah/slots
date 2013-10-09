@@ -45,6 +45,6 @@ public class Forcer {
 				reels.get(j).add(symbol);
 			}
 		}
-		return new ReelSpinResult(reels, reels);
+		return ReelSpinResult.singleState(reels);
 	}
 }

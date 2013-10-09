@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
 @Getter
 @AllArgsConstructor
 @Accessors(fluent=true)
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class ScatterModel implements Model{
 	
 	private final List<Integer> wins;
