@@ -1,6 +1,6 @@
 package gamesoft.slots.infrastructure.factory;
 
-import gamesoft.slots.domain.model.Slot;
+import gamesoft.slots.domain.model.slot.Slot;
 
 import org.springframework.beans.factory.FactoryBean;
 

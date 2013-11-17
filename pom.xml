@@ -79,6 +79,11 @@
 				<artifactId>javax.inject</artifactId>
 				<version>1</version>
 			</dependency>
+			<dependency>
+				<groupId>com.jebhomenye</groupId>
+				<artifactId>domain-common</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
